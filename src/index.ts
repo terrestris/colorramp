@@ -1,5 +1,6 @@
-import Color from 'color';
+import *  as Color from 'color';
 
+type ColorFormat = 'hex' | 'rgb' | 'hsl' | 'cymk' | 'color';
 type ColorParam = Color | string | ArrayLike<number> | number | { [key: string]: any };
 
 /**
@@ -7,7 +8,18 @@ type ColorParam = Color | string | ArrayLike<number> | number | { [key: string]:
  */
 class ColorRamp {
 
-  static getColorRamp = (colors: ColorParam[], steps: number, format='hex'): string[] =>  {
+  /**
+   *
+   * @param {ColorParam[]} colors An array of colors. The colors have to be in one of the formats
+   *    supported by the 'color' package.
+   * @param {number} steps The amount of colors that should be returned by this function.
+   * @param {ColorFormat} format The format in which the returned colors should be represented.
+   *    Supported values are: 'hex', 'rgb', 'hsl, 'cmyk' and 'color'. Default is 'hex'
+   * @return {ColorParam[]} An array of colors in the specified format.
+   * @static
+   * @memberof ColorRamp
+   */
+  static getColorRamp = (colors: ColorParam[], steps: number, format:ColorFormat='hex'): ColorParam[] =>  {
     if (steps < 2 ) {
       steps = 2;
     }
@@ -26,11 +38,35 @@ class ColorRamp {
       calculatedColors.push(newColor);
     }
 
-    const formattedColors = calculatedColors.map(hslColor => hslColor.hex());
-    return formattedColors;
+    switch (format.toLowerCase()) {
+      case 'hex':
+        return calculatedColors.map(hslColor => hslColor.hex());
+      case 'rgb':
+        return calculatedColors.map(hslColor => hslColor.rgb());
+      case 'hsl':
+        return calculatedColors.map(hslColor => hslColor.string());
+      case 'cmyk':
+        return calculatedColors.map(hslColor => hslColor.cmyk());
+      case 'color':
+        return calculatedColors;
+      default:
+        return calculatedColors.map(hslColor => hslColor.hex());
+    }
   }
 
-  static interpolateColors = (color1: ColorParam, color2: ColorParam, percentage: number) => {
+  /**
+   * This method allows to interpolate two colors. The third parameter is the
+   * percentage of the second color to be used.
+   *
+   * @param {ColorParam} color1 The first color used for the interpolation.
+   * @param {ColorParam} color2 The second color used for the interpolation.
+   * @param {number} percentage The percentage of the second color to be used for
+   *    the interpolation.
+   * @return {Color} A Color as described by the 'color' package.
+   * @static
+   * @memberof ColorRamp
+   */
+  static interpolateColors = (color1: ColorParam, color2: ColorParam, percentage: number): Color => {
     percentage = percentage / 100;
     color1 = Color(color1).hsl();
     color2 = Color(color2).hsl();

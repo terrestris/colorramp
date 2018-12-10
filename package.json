@@ -2,10 +2,21 @@
   "name": "colorramp",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "/lib/index.js",
+  "types": "/lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "build": "tsc"
   },
+  "keywords": [
+    "colorramp",
+    "colormap",
+    "color",
+    "colors"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/terrestris/colorramp.git"
@@ -16,7 +27,15 @@
     "url": "https://github.com/terrestris/colorramp/issues"
   },
   "homepage": "https://github.com/terrestris/colorramp#readme",
+  "devDependencies": {
+    "@types/color": "3.0.0",
+    "@types/jest": "23.3.10",
+    "jest": "23.6.0",
+    "ts-jest": "23.10.5",
+    "typescript": "3.2.2"
+  },
   "dependencies": {
-    "color": "3.1.0"
+    "color": "3.1.0",
+    "coveralls": "^3.0.2"
   }
 }
