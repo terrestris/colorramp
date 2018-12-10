@@ -1,6 +1,6 @@
-import *  as Color from 'color';
+import * as Color from 'color';
 
-type ColorFormat = 'hex' | 'rgb' | 'hsl' | 'cymk' | 'color';
+type ColorFormat = 'hex' | 'rgb' | 'hsl' | 'color';
 type ColorParam = Color | string | ArrayLike<number> | number | { [key: string]: any };
 
 /**
@@ -9,6 +9,12 @@ type ColorParam = Color | string | ArrayLike<number> | number | { [key: string]:
 class ColorRamp {
 
   /**
+   * Creates a colorramp out of a given array of colors and a given amount of steps.
+   *
+   * Hint: As the between-colors are calculated by the hue, you should ensure that
+   * the hue-difference between the colors is bigger then `steps`.
+   *
+   * GreyScales are currently not supported!
    *
    * @param {ColorParam[]} colors An array of colors. The colors have to be in one of the formats
    *    supported by the 'color' package.
@@ -42,11 +48,9 @@ class ColorRamp {
       case 'hex':
         return calculatedColors.map(hslColor => hslColor.hex());
       case 'rgb':
-        return calculatedColors.map(hslColor => hslColor.rgb());
+        return calculatedColors.map(hslColor => hslColor.rgb().string());
       case 'hsl':
         return calculatedColors.map(hslColor => hslColor.string());
-      case 'cmyk':
-        return calculatedColors.map(hslColor => hslColor.cmyk());
       case 'color':
         return calculatedColors;
       default:
@@ -55,8 +59,8 @@ class ColorRamp {
   }
 
   /**
-   * This method allows to interpolate two colors. The third parameter is the
-   * percentage of the second color to be used.
+   * Interpolates two colors. The third parameter is the percentage of the second
+   * color to be used.
    *
    * @param {ColorParam} color1 The first color used for the interpolation.
    * @param {ColorParam} color2 The second color used for the interpolation.
